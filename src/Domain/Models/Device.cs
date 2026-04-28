@@ -20,4 +20,10 @@ public class Device
     // Navigation
     public int? AssignedUserId { get; set; }
     public User? AssignedUser { get; set; }
+
+    public void MarkAsDeleted()
+    {
+        DeletedAt = DateTime.Now;
+        IsDeleted = true;
+    }
 }

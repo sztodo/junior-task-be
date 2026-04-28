@@ -12,4 +12,10 @@ public class User
     public bool IsDeleted { get; set; } = false;
     // Navigation
     public ICollection<Device> AssignedDevices { get; set; } = new List<Device>();
+
+    public void MarkAsDeleted()
+    {
+        DeletedAt = DateTime.Now;
+        IsDeleted = true;
+    }
 }
