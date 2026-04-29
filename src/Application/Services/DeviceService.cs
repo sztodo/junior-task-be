@@ -115,7 +115,6 @@ public class DeviceService : IDeviceService
         d.Id,
         d.Name,
         d.Manufacturer,
-        d.Type,
         d.Type.ToString(),
         d.OperatingSystem,
         d.OsVersion,

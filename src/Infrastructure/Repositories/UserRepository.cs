@@ -15,21 +15,30 @@ public class UserRepository : IUserRepository
     }
 
     public async Task<IEnumerable<User>> GetAllAsync()
-        => await _context.Users.AsNoTracking().ToListAsync();
+    {
+        return await _context.Users.AsNoTracking().Where(u => !u.IsDeleted).ToListAsync();
+    }
 
     public async Task<IEnumerable<User>> GetAllWithDevicesAsync()
-        => await _context.Users
+    {
+        return await _context.Users
             .AsNoTracking()
+            .Where(u => !u.IsDeleted)
             .Include(u => u.AssignedDevices)
             .ToListAsync();
+    }
 
     public async Task<User?> GetByIdAsync(int id)
-        => await _context.Users.FindAsync(id);
+    {
+        return await _context.Users.FirstOrDefaultAsync(u => !u.IsDeleted && u.Id == id);
+    }
 
     public async Task<User?> GetByIdWithDevicesAsync(int id)
-        => await _context.Users
+    {
+        return await _context.Users
             .Include(u => u.AssignedDevices)
-            .FirstOrDefaultAsync(u => u.Id == id);
+            .FirstOrDefaultAsync(u => u.Id == id && !u.IsDeleted);
+    }
 
     public async Task<User> CreateAsync(User entity)
     {

@@ -6,7 +6,6 @@ public record DeviceDto(
     int Id,
     string Name,
     string Manufacturer,
-    DeviceType Type,
     string TypeLabel,
     string OperatingSystem,
     string OsVersion,

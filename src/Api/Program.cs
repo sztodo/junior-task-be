@@ -19,7 +19,7 @@ builder.Services.AddSwaggerGen(options =>
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<DeviceManagementDbContext>(options =>
     options.UseSqlServer(connectionString, b =>
-        b.MigrationsAssembly("Infrastructure")));
+        b.MigrationsAssembly(typeof(DeviceManagementDbContext).Assembly.FullName)));
 
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
@@ -33,8 +33,7 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 
-// Middleware-ul de excepții ar trebui să fie primul
-// app.UseMiddleware<ExceptionMiddleware>(); 
+app.UseMiddleware<ExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {

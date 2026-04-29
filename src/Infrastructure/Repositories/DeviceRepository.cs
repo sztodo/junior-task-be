@@ -15,28 +15,39 @@ public class DeviceRepository : IDeviceRepository
     }
 
     public async Task<IEnumerable<Device>> GetAllAsync()
-        => await _context.Devices.AsNoTracking().ToListAsync();
+    {
+        return await _context.Devices.Where(d => !d.IsDeleted).ToListAsync();
+    }
 
     public async Task<IEnumerable<Device>> GetAllWithUsersAsync()
-        => await _context.Devices
+    {
+        return await _context.Devices
             .AsNoTracking()
+            .Where(d => !d.IsDeleted)
             .Include(d => d.AssignedUser)
             .ToListAsync();
+    }
 
     public async Task<Device?> GetByIdAsync(int id)
-        => await _context.Devices.FindAsync(id);
+    {
+        return await _context.Devices.FirstOrDefaultAsync(d => !d.IsDeleted && d.Id == id);
+    }
 
     public async Task<Device?> GetByIdWithUserAsync(int id)
-        => await _context.Devices
+    {
+        return await _context.Devices
             .Include(d => d.AssignedUser)
-            .FirstOrDefaultAsync(d => d.Id == id);
+            .FirstOrDefaultAsync(d => d.Id == id && !d.IsDeleted);
+    }
 
     public async Task<IEnumerable<Device>> GetByUserIdAsync(int userId)
-        => await _context.Devices
+    {
+        return await _context.Devices
             .AsNoTracking()
             .Include(d => d.AssignedUser)
-            .Where(d => d.AssignedUserId == userId)
+            .Where(d => d.AssignedUserId == userId && !d.IsDeleted)
             .ToListAsync();
+    }
 
     public async Task<Device> CreateAsync(Device entity)
     {
