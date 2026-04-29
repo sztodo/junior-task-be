@@ -1,9 +1,7 @@
 using Application.Interfaces;
 using Application.Services;
 using Domain.Interfaces;
-using Infrastructure.Context;
 using Infrastructure.Repositories;
-using Microsoft.EntityFrameworkCore;
 
 namespace Api.Extensions;
 
