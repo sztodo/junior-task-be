@@ -5,6 +5,7 @@ using Domain.Interfaces;
 using Domain.Interfaces.Services;
 using Infrastructure.Repositories;
 using Infrastructure.Services;
+using Infrastructure.Services.AI;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -22,6 +23,11 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAuthUserRepository, AuthUserRepository>();
         services.AddScoped<ITokenService, JwtTokenService>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
+        services.AddHttpClient<IDescriptionGeneratorService, DescriptionGeneratorService>(
+            client =>
+            {
+                client.Timeout = TimeSpan.FromSeconds(30);
+            });
 
         return services;
     }
