@@ -1,4 +1,4 @@
-# Device Management System — Phase 1 (Backend)
+# Device Management System  (Backend)
 
 ## A RESTful ASP.NET Core 10 Web API for tracking company-owned mobile devices, their specifications, locations, and user assignments.
 
@@ -26,9 +26,10 @@ Infrastructure  →  Domain
 
 ## Run project
 
-Run this command in the terminal `docker compose up -d` to start both the containers
-Before running the application the first time, apply the migrations. The command for that is below.
-Run this command in the terminal `dotnet run --project src/Api/Api.csproj` to start the API server
+- Run this command in the terminal `docker compose up -d` to start both the containers
+- Before running the application the first time, apply the migrations. The command for that is below.
+- Copy the contents of `appsettings.json` into `appsettings.Development.json` making the needed changes for your local configurations.
+- Run this command in the terminal `dotnet run --project src/Api/Api.csproj` to start the API server
 
 ## Apply migrations
 

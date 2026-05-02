@@ -60,4 +60,10 @@ public class UserRepository : IUserRepository
         _context.Users.Update(user);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<User?> GetByPropertiesAsync(string name, string role, string location)
+    {
+        return await _context.Users.Where(u => u.Name == name && u.Role == role && u.Location == location && !u.IsDeleted)
+        .FirstOrDefaultAsync();
+    }
 }

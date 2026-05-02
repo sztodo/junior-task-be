@@ -23,6 +23,7 @@ builder.Services.AddDbContext<DeviceManagementDbContext>(options =>
 
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
+builder.Services.AddJwtAuthentication(builder.Configuration);
 
 builder.Services.AddCors(options =>
 {
@@ -43,6 +44,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowAll");
 // app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 

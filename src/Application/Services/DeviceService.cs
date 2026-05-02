@@ -111,6 +111,32 @@ public class DeviceService : IDeviceService
         return devices.Select(MapToDto);
     }
 
+    public async Task<DeviceDto> SelfAssignAsync(int deviceId, int userId)
+    {
+        var device = await _deviceRepository.GetByIdAsync(deviceId)
+            ?? throw new KeyNotFoundException($"Device with ID {deviceId} not found.");
+
+        if (device.AssignedUserId.HasValue)
+            throw new InvalidOperationException("This device is already assigned to another user.");
+
+        await _deviceRepository.AssignUserAsync(deviceId, userId);
+        var updated = await _deviceRepository.GetByIdWithUserAsync(deviceId);
+        return MapToDto(updated!);
+    }
+
+    public async Task<DeviceDto> SelfUnassignAsync(int deviceId, int userId)
+    {
+        var device = await _deviceRepository.GetByIdAsync(deviceId)
+            ?? throw new KeyNotFoundException($"Device with ID {deviceId} not found.");
+
+        if (device.AssignedUserId != userId)
+            throw new UnauthorizedAccessException("You can only unassign devices that are assigned to you.");
+
+        await _deviceRepository.AssignUserAsync(deviceId, null);
+        var updated = await _deviceRepository.GetByIdWithUserAsync(deviceId);
+        return MapToDto(updated!);
+    }
+
     private static DeviceDto MapToDto(Device d) => new(
         d.Id,
         d.Name,
