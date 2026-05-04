@@ -21,8 +21,15 @@ namespace Api.Controllers
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
-            var response = await _authService.RegisterAsync(request);
-            return StatusCode(StatusCodes.Status201Created, response);
+            try
+            {
+                var response = await _authService.RegisterAsync(request);
+                return StatusCode(StatusCodes.Status201Created, response);
+            }
+            catch (InvalidOperationException ex) when (ex.Message.Contains("already exists"))
+            {
+                return Conflict(new { message = ex.Message });
+            }
         }
 
         [HttpPost("login")]
@@ -30,8 +37,15 @@ namespace Api.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            var response = await _authService.LoginAsync(request);
-            return Ok(response);
+            try
+            {
+                var response = await _authService.LoginAsync(request);
+                return Ok(response);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(new { message = ex.Message });
+            }
         }
     }
 }

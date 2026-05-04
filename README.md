@@ -1,4 +1,4 @@
-# Device Management System  (Backend)
+# Device Management System (Backend)
 
 ## A RESTful ASP.NET Core 10 Web API for tracking company-owned mobile devices, their specifications, locations, and user assignments.
 
@@ -34,3 +34,9 @@ Infrastructure  →  Domain
 ## Apply migrations
 
 Run `dotnet ef database update --project src/Infrastructure --startup-project src/Api` in the terminal to apply migrations
+
+---
+
+## Run tests
+
+Run `dotnet test`

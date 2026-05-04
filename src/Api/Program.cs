@@ -16,10 +16,13 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<DeviceManagementDbContext>(options =>
-    options.UseSqlServer(connectionString, b =>
-        b.MigrationsAssembly(typeof(DeviceManagementDbContext).Assembly.FullName)));
+if (builder.Environment.EnvironmentName != "Testing")
+{
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    builder.Services.AddDbContext<DeviceManagementDbContext>(options =>
+        options.UseSqlServer(connectionString, b =>
+            b.MigrationsAssembly(typeof(DeviceManagementDbContext).Assembly.FullName)));
+}
 
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
@@ -47,23 +50,24 @@ app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-
-using (var scope = app.Services.CreateScope())
+if (app.Environment.EnvironmentName != "Testing")
 {
-    var services = scope.ServiceProvider;
-    try
+    using (var scope = app.Services.CreateScope())
     {
-        var context = services.GetRequiredService<DeviceManagementDbContext>();
-        context.Database.Migrate();
-        Console.WriteLine("--> Database migration and seeding completed successfully.");
-    }
-    catch (Exception ex)
-    {
-        var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred during database migration.");
+        var services = scope.ServiceProvider;
+        try
+        {
+            var context = services.GetRequiredService<DeviceManagementDbContext>();
+            context.Database.Migrate();
+            Console.WriteLine("--> Database migration and seeding completed successfully.");
+        }
+        catch (Exception ex)
+        {
+            var logger = services.GetRequiredService<ILogger<Program>>();
+            logger.LogError(ex, "An error occurred during database migration.");
+        }
     }
 }
-
 app.Run();
 
 public partial class Program { }
