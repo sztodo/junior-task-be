@@ -12,6 +12,8 @@ public class DeviceConfiguration : IEntityTypeConfiguration<Device>
 
         builder.HasKey(d => d.Id);
 
+        builder.HasQueryFilter(d => !d.IsDeleted);
+
         builder.Property(d => d.Name)
             .IsRequired()
             .HasMaxLength(200);
