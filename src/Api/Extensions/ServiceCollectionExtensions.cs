@@ -28,7 +28,7 @@ public static class ServiceCollectionExtensions
             {
                 client.Timeout = TimeSpan.FromSeconds(30);
             });
-
+        services.AddScoped<ISearchService, SearchService>();
         return services;
     }
 
