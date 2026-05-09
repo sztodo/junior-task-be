@@ -4,6 +4,6 @@ namespace Application.Interfaces;
 
 public interface ISearchService
 {
-    Task<IEnumerable<DeviceSearchResultDto>> SearchAsync(string query);
+    Task<IEnumerable<DeviceDto>> SearchAsync(string query);
 
 }

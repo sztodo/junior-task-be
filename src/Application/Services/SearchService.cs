@@ -21,12 +21,12 @@ public class SearchService : ISearchService
         _deviceRepository = deviceRepository;
     }
 
-    public async Task<IEnumerable<DeviceSearchResultDto>> SearchAsync(string query)
+    public async Task<IEnumerable<DeviceDto>> SearchAsync(string query)
     {
         var tokens = Tokenize(query);
 
         if (tokens.Length == 0)
-            return Enumerable.Empty<DeviceSearchResultDto>();
+            return Enumerable.Empty<DeviceDto>();
 
         var devices = await _deviceRepository.GetAllWithUsersAsync();
 
@@ -38,7 +38,7 @@ public class SearchService : ISearchService
             })
             .Where(x => x.score > 0)
             .OrderByDescending(x => x.score)
-            .Select(x => new DeviceSearchResultDto(
+            .Select(x => new DeviceDto(
                 x.device.Id,
                 x.device.Name,
                 x.device.Manufacturer,
@@ -50,7 +50,8 @@ public class SearchService : ISearchService
                 x.device.Description,
                 x.device.AssignedUserId,
                 x.device.AssignedUser?.Name,
-                x.score))
+                x.device.CreatedAt,
+                x.device.UpdatedAt))
             .ToList();
 
         return results;
