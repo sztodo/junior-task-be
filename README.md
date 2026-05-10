@@ -29,12 +29,12 @@ Infrastructure  →  Domain
 
 - Run this command in the terminal `docker compose up -d` to start both the containers
 - Before running the application the first time, apply the migrations. The command for that is below.
-- Copy the contents of `appsettings.json` into `appsettings.Development.json` making the needed changes for your local configurations.
+- Create `appsettings.Development.json` based on `appsettings.json` and update the values for your local environment if needed.
 - Run this command in the terminal `dotnet run --project src/Api/Api.csproj` to start the API server
 
 ## Apply migrations
 
-Run `dotnet ef database update --project src/Infrastructure --startup-project src/Api` in the terminal to apply migrations
+Run `dotnet ef database update --project src/Infrastructure --startup-project src/Api` in the terminal to apply migrations manually
 
 ---
 
@@ -86,3 +86,15 @@ sqlcmd -S localhost,1433 -U sa -P 'YourStrong!Passw0rd' \
 
 Then **log out and log back in** — the new role is embedded in the JWT token,
 so you need a fresh token for it to take effect.
+
+---
+
+## Database Initialization
+
+Pending Entity Framework migrations are automatically applied on application startup.
+
+Alternatively, SQL scripts for manual database creation and seed data are available in:
+
+```text
+src/Infrastructure/scripts
+```
